@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/knxwebbridge.dir/knxwebbridge.c.o CMakeFiles/knxwebbridge.dir/eiblog.c.o CMakeFiles/knxwebbridge.dir/knxlog.c.o  -o knxwebbridge  -L/usr/local/Cellar/openssl/1.0.2e/lib -Wl,-rpath,/usr/local/Cellar/openssl/1.0.2e/lib:/home/pi/knx/build/libs: -lm -lcrypto ../libs/libeibknxlib.so 

@@ -1,0 +1,8 @@
+		time_t	actTime ;
+	struct	tm	myTime ;
+		char	timeBuffer[64] ;
+		int	timeMin ;				// daytime in minutes
+		int	pumpUpTime ;				// time pump is running in seconds
+		int	pumpDownTime ;				// time pump is idle in seconds
+		int	pumpOnTime ;				// time when solar pump was switched on last
+		int	pumpOffTime ;				// time when solar pump was switched off

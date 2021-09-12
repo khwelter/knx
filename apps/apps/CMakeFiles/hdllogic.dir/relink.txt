@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/hdllogic.dir/hdllogic.c.o CMakeFiles/hdllogic.dir/eiblog.c.o CMakeFiles/hdllogic.dir/knxlog.c.o  -o CMakeFiles/CMakeRelink.dir/hdllogic  -L/usr/local/Cellar/openssl/1.0.2e/lib -lm ../libs/libeibknxlib.so /usr/lib/arm-linux-gnueabihf/libmariadb.so 

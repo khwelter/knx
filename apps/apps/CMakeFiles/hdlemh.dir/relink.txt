@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/hdlemh.dir/hdlemh.c.o CMakeFiles/hdlemh.dir/eiblog.c.o CMakeFiles/hdlemh.dir/knxlog.c.o  -o CMakeFiles/CMakeRelink.dir/hdlemh  -L/usr/local/Cellar/openssl/1.0.2e/lib -lm ../libs/libeibknxlib.so /usr/lib/arm-linux-gnueabihf/libmariadb.so 

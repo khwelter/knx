@@ -1,0 +1,15 @@
+[dbSys]
+alias           =       "sys"
+host            =       "localhost"
+user            =       "writtelbrunft"
+password        =       "writtelbrunft"
+name            =       "a9H3kf7ejyHHjK2E"
+driver          =       "mysql"
+prefix          =       ""
+
+[dbRemote]
+url		=	"http://mas.wimtecc.de/api/knxUploadData.php"
+urlUser		=	"test"
+urlPassword	=	"unorthodox"
+dbUser		=	"a9H3kf7ejyHHjK2E"
+dbPassword	=	"tfm-xpW-Nkd-Z4o"

@@ -1,0 +1,1 @@
+/usr/bin/cc  -fPIC   -shared -Wl,-soname,libeibknxlib.so -o libeibknxlib.so CMakeFiles/eibknxlib.dir/eib.c.o CMakeFiles/eibknxlib.dir/tty.c.o CMakeFiles/eibknxlib.dir/debug.c.o CMakeFiles/eibknxlib.dir/mylib.c.o CMakeFiles/eibknxlib.dir/crc16lib.c.o CMakeFiles/eibknxlib.dir/inilib.c.o 

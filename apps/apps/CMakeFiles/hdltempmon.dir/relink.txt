@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/hdltempmon.dir/hdltempmon.c.o CMakeFiles/hdltempmon.dir/eiblog.c.o CMakeFiles/hdltempmon.dir/knxlog.c.o  -o CMakeFiles/CMakeRelink.dir/hdltempmon  -L/usr/local/Cellar/openssl/1.0.2e/lib -lm ../libs/libeibknxlib.so /usr/lib/arm-linux-gnueabihf/libmariadb.so 

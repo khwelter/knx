@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/knxipbridge.dir/knxipbridge.c.o CMakeFiles/knxipbridge.dir/eiblog.c.o CMakeFiles/knxipbridge.dir/knxlog.c.o  -o CMakeFiles/CMakeRelink.dir/knxipbridge  -L/usr/local/Cellar/openssl/1.0.2e/lib -lm ../libs/libeibknxlib.so 
