@@ -638,6 +638,8 @@ traceit(" ****************************** : %d\n", timeDiffIoT) ;
 				if ( timeDiffIoT >= 10) {				// log every 10 seconds
 traceit(" ---------------------------------------------------------------- \n") ;
 					timeLastIoT	=	timeAct ;
+   					sprintf( mqttBuf, "%8.3f", value / 1000.0) ;
+					sendData( 10496, mqttBuf) ;
 					if ( lastValueIoT != -1) {
    						sprintf( mqttBuf, "%6.2f", ( value - lastValueIoT) * ( 360.0 / timeDiffIoT)) ;
 						sendData( 10497, mqttBuf) ;
