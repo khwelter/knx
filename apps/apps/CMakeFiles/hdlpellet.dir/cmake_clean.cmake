@@ -4,8 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/hdlpellet.dir/knxlog.c.o"
   "hdlpellet.pdb"
   "hdlpellet"
-  "hdlpellet.pdb"
-  "CMakeFiles/CMakeRelink.dir/hdlpellet"
 )
 
 # Per-language clean rules from dependency scanning.

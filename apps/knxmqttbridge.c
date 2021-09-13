@@ -188,7 +188,7 @@ void	iniCallback( char *_block, char *_para, char *_value) {
 			cfgQueueKey	=	atoi( _value) ;
 		}
 	} else if ( strcmp( _block, "[knxmqttbridge]") == 0) {
-	_debug( 1, progName, "receive ini value block/paramater/value ... : %s/%s/%s\n", _block, _para, _value) ;
+		_debug( 1, progName, "receive ini value block/paramater/value ... : %s/%s/%s\n", _block, _para, _value) ;
 		if ( strcmp( _para, "host") == 0) {
 			strcpy( cfgMqttHost, _value) ;
 		} else if ( strcmp( _para, "user") == 0) {

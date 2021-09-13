@@ -4,8 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/sendi8.dir/knxlog.c.o"
   "sendi8.pdb"
   "sendi8"
-  "sendi8.pdb"
-  "CMakeFiles/CMakeRelink.dir/sendi8"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -5,8 +5,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/knxmon.dir/myxml.c.o"
   "knxmon.pdb"
   "knxmon"
-  "knxmon.pdb"
-  "CMakeFiles/CMakeRelink.dir/knxmon"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -4,8 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/knxwebbridge.dir/knxlog.c.o"
   "knxwebbridge.pdb"
   "knxwebbridge"
-  "knxwebbridge.pdb"
-  "CMakeFiles/CMakeRelink.dir/knxwebbridge"
 )
 
 # Per-language clean rules from dependency scanning.

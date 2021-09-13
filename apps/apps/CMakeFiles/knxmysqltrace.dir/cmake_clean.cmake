@@ -4,8 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/knxmysqltrace.dir/knxlog.c.o"
   "knxmysqltrace.pdb"
   "knxmysqltrace"
-  "knxmysqltrace.pdb"
-  "CMakeFiles/CMakeRelink.dir/knxmysqltrace"
 )
 
 # Per-language clean rules from dependency scanning.

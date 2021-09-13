@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016, 2017 Karl-Heinz Welter
+ * Copyright (c) 2016-2021 Karl-Heinz Welter
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,14 +30,19 @@
  * Date		Rev.	Who	what
  * -----------------------------------------------------------------------------
  * 2016-06-23	PA1	khw	inception;
+ * 2021-09-12	PA2	khw	added MQTT Messages;
  *
  */
 #include	<stdio.h>
+#include	<stdarg.h>
 #include	<stdlib.h>
+#include	<stdbool.h>
+#include	<stdint.h>
 #include	<strings.h>
 #include	<unistd.h>
 #include	<time.h>
 #include	<math.h>
+#include        <syslog.h>
 #include	<unistd.h>
 #include	<sys/types.h>
 #include	<sys/ipc.h>
@@ -46,59 +51,159 @@
 #include	<sys/sem.h>
 #include	<sys/signal.h>
 #include        <mysql.h>
+#include        <mosquitto.h>
 
 #include	"debug.h"
-#include	"knxlog.h"
 #include	"tty.h"
 #include	"eib.h"
 #include	"nodeinfo.h"
 #include	"mylib.h"
 #include	"hdlemh.h"
 #include	"inilib.h"
+
 /**
  *
  */
 #define	MAX_SLEEP	1
 #define	SLEEP_TIME	1
+
 /**
  *
  */
 extern	void	help() ;
+
 /**
  *
  */
 char	progName[64]  ;
 pid_t	ownPID ;
-knxLogHdl	*myKnxLogger ;
 int	recLevel	=	0 ;;
-/**
- *
- */
-void	sigHandler( int _sig) {
-	debugLevel	=	-1 ;
-}
+
 /**
  *
  */
 int	cfgQueueKey	=	10031 ;
 int	cfgSenderAddr	=	1 ;
 char	cfgSerial[64] ;				// serial port, e.g. /dev/tty00
-int	cfgStartupDelay	=	15 ;		// default startup delay 15 seconds
+int	cfgStartupDelay	=	5 ;		// default startup delay 15 seconds
+int	cfgDebugLevel   =   5 ;     		// default startup delay 5 seconds
+int	cfgDaemon   =   true ;      		// default startup delay 5 seconds
+int	cfgTrace    =   false ;
+
+char	cfgMqttHost[32] ;
+char	cfgMqttUser[32] ;
+char	cfgMqttPasswd[32] ;
+char	cfgMqttCACert[64] ;
+char	cfgMqttKey[64] ;
+char	cfgMqttCert[64] ;
+char	cfgMqttPrefix[64] ;
+char	cfgMqttFilter[64] ;
+bool	cfgMqttForwardAll   =   false ;
+bool	cfgMqttForwardBaos  =   false ;
+
+struct	mosquitto	*mosq ;
+
 char	dbHost[64]	=	"*" ;
 char	dbName[64]	=	"*" ;
 char	dbUser[64]	=	"*" ;
 char	dbPassword[64]	=	"*" ;
+
 /**
-  *
+ *
  */
-int	timeLast ;
+MYSQL	*mySql ;
+extern	void	mySqlQuery( char *) ;
+extern	void	sendData( unsigned int, unsigned char *) ;
+
+/**
+ *
+ */
 int	timeAct ;
+int	timeLast ;
+int	timeLastIoT ;
 int	timeDiff ;
+int	timeDiffIoT ;
+
+/**
+ *
+ */
+void	sigHandlerTraceInc( int _sig) {
+	logit(  "signal %d received ...", _sig) ;
+	cfgDebugLevel	=	-1 ;
+	cfgTrace++ ;
+	logit(  "new trace level %d ...", cfgTrace) ;
+}
+
+/**
+ *
+ */
+void	sigHandlerTraceOff( int _sig) {
+	logit(  "signal %d received ...", _sig) ;
+	cfgDebugLevel	=	-1 ;
+	cfgTrace	=	0 ;
+	logit(  "new trace level %d ...", cfgTrace) ;
+}
+
+/**
+ *
+ */
+void onConnect( struct mosquitto *mosq, void *obj, int result) {
+	int rc = MOSQ_ERR_SUCCESS;
+
+	fprintf( stderr, "onConnect received \n") ;
+	if ( !result) {
+		mosquitto_subscribe( mosq, NULL, "2km/#", 0);
+	} else {
+		fprintf( stderr, "%s\n", mosquitto_connack_string( result));
+	}
+}
+
+/**
+ *
+ */
+void onMessage( struct mosquitto *mosq, void *obj, const struct mosquitto_message *message) {
+	int	val ;
+	char	bufNew[128] ;
+	struct mosquitto *mosq2 = (struct mosquitto *)obj;
+	char	*ptr, owner[64], mainTopic[64], subTopic[64], component[64], qr[64], data[64] ;
+	int	index ;
+	
+	if ( message->payload ==  NULL) {
+		strcpy( bufNew, "") ;
+	} else {
+		strcpy( bufNew, message->payload) ;
+	}
+	if ( cfgDebugLevel > 0) {
+ 		traceit( "MQTT Message ..... : \n") ;
+ 		traceit( "    Topic ........ : %s \n", message->topic) ;
+ 		traceit( "    Message ...... : %s [%s] \n", message->payload, bufNew) ;
+ 		traceit( "    Message ...... : %s \n", message->payload) ;
+	}
+	
+	index	=	-1 ;
+	ptr	=	strtok( message->topic, "/") ;
+	ptr	=	strtok( NULL, "/") ;
+}
+
+/**
+ *
+ */
+void	connectMQTT() {
+	mosquitto_lib_init() ;
+	mosq	=	mosquitto_new( NULL, true, NULL) ;
+	mosquitto_username_pw_set( mosq, cfgMqttUser, cfgMqttPasswd) ;
+	mosquitto_connect_callback_set( mosq, onConnect) ;
+	mosquitto_message_callback_set( mosq, onMessage) ;
+	mosquitto_connect( mosq, cfgMqttHost, 1883, 60) ;
+	mosquitto_loop_start( mosq) ;
+}
+
+/**
 /**
  *
  */
 void	iniCallback( char *_block, char *_para, char *_value) {
-	_debug( 1, progName, "receive ini value block/paramater/value ... : %s/%s/%s\n", _block, _para, _value) ;
+	logitR2( cfgTrace, 1, progName, "receive ini value block/paramater/value ... : %s/%s/%s\n", _block, _para, _value) ;
 	if ( strcmp( _block, "[knxglobals]") == 0) {
 		if ( strcmp( _para, "queueKey") == 0) {
 			cfgQueueKey	=	atoi( _value) ;
@@ -112,6 +217,22 @@ void	iniCallback( char *_block, char *_para, char *_value) {
 			strcpy( dbUser, _value) ;
 		} else if ( strcmp( _para, "dbPassword") == 0) {
 			strcpy( dbPassword, _value) ;
+		}
+	} else if ( strcmp( _block, "[knxmqttbridge]") == 0) {
+		if ( strcmp( _para, "host") == 0) {
+			strcpy( cfgMqttHost, _value) ;
+		} else if ( strcmp( _para, "user") == 0) {
+			strcpy( cfgMqttUser, _value) ;
+		} else if ( strcmp( _para, "passwd") == 0) {
+			strcpy( cfgMqttPasswd, _value) ;
+		} else if ( strcmp( _para, "caCert") == 0) {
+			strcpy( cfgMqttCACert, _value) ;
+		} else if ( strcmp( _para, "key") == 0) {
+			strcpy( cfgMqttKey, _value) ;
+		} else if ( strcmp( _para, "cert") == 0) {
+			strcpy( cfgMqttCert, _value) ;
+		} else if ( strcmp( _para, "prefix") == 0) {
+			strcpy( cfgMqttPrefix, _value) ;
 		}
 	} else if ( strcmp( _block, "[hdlemh]") == 0) {
 		if ( strcmp( _para, "senderAddr") == 0) {
@@ -127,18 +248,12 @@ void	iniCallback( char *_block, char *_para, char *_value) {
 /**
  *
  */
-MYSQL	*mySql ;
-extern	void	mySqlQuery( char *) ;
-
-/**
- *
- */
 int	main( int argc, char *argv[]) {
 	eibHdl	*myEIB ;
 	ttyHdl	*myTTY ;
 	int	myAPN	=	0 ;
 	knxMsg	*msgToSnd, msgBuf ;
-	int		pid ;
+	int		pid, sid ;
 	int		il0 ;
 	int	sendingByte ;
 	int	msgCount ;
@@ -164,14 +279,15 @@ int	main( int argc, char *argv[]) {
 	unsigned	char	*sndData ;
 	int	cycleCounter ;
 	char	iniFilename[]	=	"knx.ini" ;
+
 	/**
-	 * setup the shared memory for EIB Receiving Buffer
+	 * application specific variables
 	 */
-	ownPID	=	getpid() ;
-	signal( SIGINT, sigHandler) ;
-	setbuf( stdout, NULL) ;
+
+	/**
+	 *
+	 */
 	strcpy( progName, *argv) ;
-	_debug( 0, progName, "starting up ...") ;
 
 	/**
 	 *
@@ -181,10 +297,13 @@ int	main( int argc, char *argv[]) {
 	/**
 	 * get command line options
 	 */
-	while (( opt = getopt( argc, argv, "D:Q:?")) != -1) {
+	while (( opt = getopt( argc, argv, "D:FQ:?")) != -1) {
 		switch ( opt) {
 		case	'D'	:
 			debugLevel	=	atoi( optarg) ;
+			break ;
+		case    'F'     :
+			cfgDaemon	=	false ;
 			break ;
 		case	'Q'	:
 			cfgQueueKey	=	atoi( optarg) ;
@@ -199,28 +318,66 @@ int	main( int argc, char *argv[]) {
 			break ;
 		}
 	}
+
+	/**
+	 * daemonize this process, if so required
+	 */
+	logit(  "starting up ...") ;
+	if ( cfgDaemon) {
+		logit( "daemon mode ...") ;
+		pid	=	fork() ;
+		if ( pid < 0) {
+			logit( "pid < 0, exiting ...") ;
+			exit( EXIT_FAILURE) ;
+		}
+		if ( pid > 0) {
+			logit( "pid > 0, exiting ...") ;
+			exit( EXIT_SUCCESS) ;
+		}
+		sid	=	setsid() ;
+		if ( sid < 0) {
+			logit( "sid < 0, exiting ...") ;
+			exit( EXIT_FAILURE) ;
+		}
+		logit( "closing std i/o ...") ;
+		close( STDIN_FILENO) ;
+		close( STDOUT_FILENO) ;
+		close( STDERR_FILENO) ;
+	} else {
+		logit( "non-daemon mode ...") ;
+	}
+	ownPID	=	getpid() ;
+	signal( SIGUSR1, sigHandlerTraceInc) ;
+	signal( SIGUSR2, sigHandlerTraceOff) ;
+	sleep( cfgStartupDelay) ;
+
 	/**
 	 *
 	 */
 	if (( mySql = mysql_init( NULL)) == NULL) {
-		_debug( 0, progName, "could not initialize MySQL access") ;
-		_debug( 0, progName, "Exiting with -1");
+		logitR2( cfgTrace, 0, progName, "could not initialize MySQL access") ;
+		logitR2( cfgTrace, 0, progName, "Exiting with -1");
 		exit( -1) ;
 	}
 	if ( mysql_real_connect( mySql, dbHost, dbUser, dbPassword, dbName, 0, NULL, 0) == NULL) {
-		_debug( 0, progName, "mysql error := '%s'", mysql_error( mySql)) ;
-		_debug( 0, progName, "Exiting with -2");
+		logitR2( cfgTrace, 0, progName, "mysql error := '%s'", mysql_error( mySql)) ;
+		logitR2( cfgTrace, 0, progName, "Exiting with -2");
 		exit( -2) ;
 	}
+
 	/**
 	 *
 	 */
-	timeLast	=	0 ;
+	connectMQTT() ;
+
+	/**
+	 *
+	 */
 	timeAct	=	0 ;
+	timeLast	=	0 ;
+	timeLastIoT	=	0 ;
 	timeDiff	=	0 ;
-	myKnxLogger	=	knxLogOpen( IPC_CREAT) ;
-	knxLog( myKnxLogger, progName, "%d: starting up ...", ownPID) ;
-	knxLog( myKnxLogger, progName, "%d: start up delay %d", ownPID, cfgStartupDelay) ;
+	timeDiffIoT	=	0 ;
 	sleep( cfgStartupDelay) ;
 
 	/**
@@ -233,28 +390,27 @@ int	main( int argc, char *argv[]) {
 		 */
 		ttyPrep( cfgSerial, bdrate, mode) ;
 		if (( myTTY = ttyOpen( cfgSerial, bdrate, mode)) == NULL) {
-			_debug( 1, progName, "Can not open tty");
+			logitR2( cfgTrace, 1, progName, "Can not open tty");
 			return( 0);
 		}
 		myEIB	=	eibOpen( cfgSenderAddr, 0x00, cfgQueueKey, progName, APN_RDWR) ;
 		myAPN	=	myEIB->apn ;
-		printf( "myAPN ..... %d \n", myEIB->apn) ;
-		knxLog( myKnxLogger, progName, "%d: myAPN := %d", ownPID, myEIB->apn) ;
+		logit( "myAPN := %d", myEIB->apn) ;
 
 		/**
 		 *
 		 */
 		cycleCounter	=	0 ;
-		knxLog( myKnxLogger, progName, "%d: running on MacOS", ownPID) ;
+		logit( "running on MacOS") ;
 		rcvMode	=	emhWaitBegin ;
 		cntEscBegin	=	0 ;		// counter for 0x1b in the begin message
 		lmp	=	NULL ;
-		_debug( 1, progName, "starting .... : emhWaitBegin");
+		logitR2( cfgTrace, 1, progName, "starting .... : emhWaitBegin");
 		while ( debugLevel >= 0) {
-//			_debug( 1, progName, "cycleCounter := %d", cycleCounter++) ;
+//			logitR2( cfgTrace, 1, progName, "cycleCounter := %d", cycleCounter++) ;
 			rcvdBytes	=	ttyPoll( myTTY, (unsigned char *) &buf, 1) ;
 			if ( rcvdBytes > 0) {
-				_debug( 11, progName, "character ... : %02x", buf);
+//				logitR2( cfgTrace, 11, progName, "character ... : %02x", buf);
 				switch ( rcvMode) {
 				case	emhWaitBegin	:	// waiting for: 0x1b 0x1b 0x1b 0x1b
 					if ( buf == 0x1b) {
@@ -262,7 +418,7 @@ int	main( int argc, char *argv[]) {
 						if ( cntEscBegin >= 4) {
 							rcvMode	=	emhWaitVersion ;
 							cntVersion	=	0 ;
-							_debug( 1, progName, "entering .... : emhWaitVersion");
+							logitR2( cfgTrace, 1, progName, "entering .... : emhWaitVersion");
 						}
 					} else {
 					}
@@ -275,7 +431,7 @@ int	main( int argc, char *argv[]) {
 						} else {
 							rcvMode	=	emhWaitBegin ;
 							cntEscBegin	=	0 ;
-							_debug( 1, progName, "entering .... : emhWaitBegin");
+							logitR2( cfgTrace, 1, progName, "entering .... : emhWaitBegin");
 						}
 					} else if ( buf == versionNeeded) {
 						cntVersion++ ;
@@ -283,12 +439,12 @@ int	main( int argc, char *argv[]) {
 							rcvMode	=	emhWaitEnd ;
 							cntEscEnd	=	0 ;
 							bufp	=	message ;
-							_debug( 1, progName, "entering .... : emhWaitEnd");
+							logitR2( cfgTrace, 1, progName, "entering .... : emhWaitEnd");
 						}
 					} else {
 						rcvMode	=	emhWaitBegin ;
 						cntEscBegin	=	0 ;
-							_debug( 1, progName, "entering .... : emhWaitBegin");
+							logitR2( cfgTrace, 1, progName, "entering .... : emhWaitBegin");
 					}
 					break ;
 				case	emhWaitEnd	:
@@ -300,12 +456,12 @@ int	main( int argc, char *argv[]) {
 							lastMessageLen	=	(int) ( bufp - message) ;
 							memcpy( lastMessage, message, lastMessageLen) ;
 							lmp	=	lastMessage ;
-							_debug( 1, progName, "received .... : %3d octets", lastMessageLen);
-							_debug( 1, progName, "entering .... : emhWaitChecksum");
-for ( il0=0 ; il0<lastMessageLen ; il0++) {
-	printf( "%02x ", *lmp++) ;
-}
-printf( "\n") ;
+							logitR2( cfgTrace, 1, progName, "received .... : %3d octets", lastMessageLen);
+							logitR2( cfgTrace, 1, progName, "entering .... : emhWaitChecksum");
+							for ( il0=0 ; il0<lastMessageLen ; il0++) {
+								traceit( "%02x ", *lmp++) ;
+							}
+							traceit( "\n") ;
 							lmp	=	lastMessage ;
 							msgCount	=	0 ;
 						}
@@ -323,7 +479,7 @@ printf( "\n") ;
 						} else {
 							rcvMode	=	emhWaitBegin ;
 							cntEscBegin	=	0 ;
-							_debug( 1, progName, "entering .... : emhWaitBegin (pre-maturely)");
+							logitR2( cfgTrace, 1, progName, "entering .... : emhWaitBegin (pre-maturely)");
 						}
 						break ;
 					case	1	:		// receive number of filler bytes
@@ -333,7 +489,7 @@ printf( "\n") ;
 					case	3	:		// checksum
 						rcvMode	=	emhWaitBegin ;
 						cntEscBegin	=	0 ;
-						_debug( 1, progName, "entering .... : emhWaitBegin");
+						logitR2( cfgTrace, 1, progName, "entering .... : emhWaitBegin");
 						break ;
 					}
 					cntChecksum++ ;
@@ -346,9 +502,8 @@ printf( "\n") ;
 					sprintf( numPrefix, "%d", ++msgCount) ;
 					lmp	=	analyze( lmp, ( lastMessage + lastMessageLen), numPrefix, "") ;
 				} else if ( lmp != NULL) {
-//					printf( "\n") ;
 					lmp	=	NULL ;
-					_debug( 1, progName, "finished evaluation of last message") ;
+					logitR2( cfgTrace, 1, progName, "finished evaluation of last message") ;
 				}
 			}
 		}
@@ -356,17 +511,8 @@ printf( "\n") ;
 		eibClose( myEIB) ;
 		deletePIDFile( progName, "", ownPID) ;
 	} else {
-		knxLogRelease( myKnxLogger) ;
-		knxLog( myKnxLogger, progName, "%d: process already running ...", ownPID) ;
-		_debug( 0, progName, "process already running ...") ;
+		logitR2( cfgTrace, 0, progName, "process already running ...") ;
 	}
-	knxLog( myKnxLogger, progName, "%d: shutting down ...", ownPID) ;
-
-	/**
-	 * close virtual EIB bus
-	 * close KNX Level logger
-	 */
-	knxLogClose( myKnxLogger) ;
 
 	/**
 	 *
@@ -375,21 +521,24 @@ printf( "\n") ;
 }
 
 unsigned	char	*analyze( unsigned char *_mp, unsigned char *_end, const char *_numPrefix, const char *_prefix) {
-	struct		tm	tm ;
+	struct		tm		tm ;
 	unsigned	char	*lmp, *lbp ;
-			int	len ;
-			int	lenCnt ;
-			int	done ;
-			int	lenOffs ;
-			int	addLenOctets ;
-			int	locCnt ;
-			int	value ;
-			char	prefix[64] ;
-			char	numPrefix[64] ;
-			char	sql[256] ;
-			int	updatedRows ;
+				int		len ;
+				int		lenCnt ;
+				int		done ;
+				int		lenOffs ;
+				int		addLenOctets ;
+				int		locCnt ;
+				int		value ;
+	static		int		lastValue	= -1 ;
+	static		int		lastValueIoT	= -1 ;
+				char	prefix[64] ;
+				char	numPrefix[64] ;
+				char	sql[256] ;
+				int		updatedRows ;
 	MYSQL_RES		*result ;
 	MYSQL_ROW		row ;
+				char    mqttBuf[64] ;
 	/**
 	 *
 	 */
@@ -400,7 +549,7 @@ unsigned	char	*analyze( unsigned char *_mp, unsigned char *_end, const char *_nu
 	lenOffs	=	0 ;
 	addLenOctets	=	0 ;
 	while ( lmp < _end && ! done) {
-		printf( "%-8s: %s%02x (lenOffs := %d)", _numPrefix, _prefix, *lmp, lenOffs) ;
+		traceit( "%-8s: %s%02x (lenOffs := %d)", _numPrefix, _prefix, *lmp, lenOffs) ;
 		len	=	((int) ( *lmp & 0x0f)) + lenOffs ;
 		lenOffs	=	0 ;
 		/**
@@ -408,16 +557,16 @@ unsigned	char	*analyze( unsigned char *_mp, unsigned char *_end, const char *_nu
 		 */
 		switch ( *lmp++ & 0xf0) {
 		case	0x00	:			// datatype:	octet string
-			printf( "         dataType ... : octet string, length ... : %d\n%s", len, prefix) ;
+			traceit( "         dataType ... : octet string, length ... : %d\n%s", len, prefix) ;
 			lbp	=	lmp + len - 1 - addLenOctets ;
 			locCnt	=	0 ;
 			while ( lmp < lbp) {
-				printf( "%02x ", *lmp++) ;
+				traceit( "%02x ", *lmp++) ;
 				locCnt++ ;
 				if ( ( locCnt % 8) == 0)
-					printf( "\n%s", prefix) ;
+					traceit( "\n%s", prefix) ;
 			}
-			printf( "\n") ;
+			traceit( "\n") ;
 			done	=	1 ;
 			break ;
 		case	0x10	:			// datatype:	future usage
@@ -427,73 +576,95 @@ unsigned	char	*analyze( unsigned char *_mp, unsigned char *_end, const char *_nu
 		case	0x30	:			// datatype:	future usage
 			break ;
 		case	0x40	:			// datatype:	boolean
-			printf( "         dataType ... : boolean, length ... : %d\n%s", len, prefix) ;
+			traceit( "         dataType ... : boolean, length ... : %d\n%s", len, prefix) ;
 			lbp	=	lmp + len - 1 ;
 			while ( lmp < lbp) {
-				printf( "%02x ", *lmp++) ;
+				traceit( "%02x ", *lmp++) ;
 			}
-			printf( "\n") ;
+			traceit( "\n") ;
 			done	=	1 ;
 			break ;
 		case	0x50	:			// datatype:	integer
 			switch ( len) {
 			case	2	:
-				printf( "         dataType ... : integer8, length ... : %d\n%s", len, prefix) ;
+				traceit( "         dataType ... : integer8, length ... : %d\n%s", len, prefix) ;
 				lbp	=	lmp + len - 1 ;
 				value	=	0 ;
 				while ( lmp < lbp) {
 					value	=	(char) *lmp ;
-					printf( "%02x ", *lmp++) ;
+					traceit( "%02x ", *lmp++) ;
 				}
-				printf( " => %dd\n", value) ;
+				traceit( " => %dd\n", value) ;
 				done	=	1 ;
 				break ;
 			default	:
-				printf( "         dataType ... : integer, length ... : %d\n%s", len, prefix) ;
+				traceit( "         dataType ... : integer, length ... : %d\n%s", len, prefix) ;
 				lbp	=	lmp + len - 1 ;
 				value	=	0 ;
 				while ( lmp < lbp) {
 					value	=	((value << 8) + *lmp) ;
-					printf( "%02x ", *lmp++) ;
+					traceit( "%02x ", *lmp++) ;
 				}
-				printf( " => %dd\n", value) ;
+				traceit( " => %dd\n", value) ;
 				done	=	1 ;
 				break ;
 			}
 			if ( strcmp( _numPrefix, "2.4.2.5.3.6") == 0) {
-printf(" ****************************** : %d\n", timeDiff) ;
-				if ( timeDiff >= 10) {				// log every 10 seconds
+traceit(" ****************************** : %d\n", timeDiff) ;
+traceit(" ****************************** : %d\n", timeDiffIoT) ;
+				if ( timeDiff >= 60) {				// log every 60 seconds
 					timeLast	=	timeAct ;
 					/**
 					 * add the logging record
 					 */
-					sprintf( sql, "INSERT INTO log( GroupObjectId, DataType, Value) VALUES( %d, %d, '%d');",
+					sprintf( sql, "INSERT INTO log( GroupObjectId, GroupObject, DataType, Value, Descriptor) VALUES( %d, '%s', %d, %d, 'Zaehlerstand');",
 							10496,
+							"5/1/0",
 							29,
 							value
 						) ;
 					mySqlQuery( sql) ;
+					if ( lastValue != -1) {
+						sprintf( sql, "INSERT INTO log( GroupObjectId, GroupObject, DataType, Value, Descriptor) VALUES( %d, '%s', %d, %d, 'Watt');",
+								10497,
+								"5/1/1",
+								29,
+								( value - lastValue) * 6
+							) ;
+						mySqlQuery( sql) ;
+					}
+					lastValue	=	value ;
+				}
+				if ( timeDiffIoT >= 10) {				// log every 10 seconds
+traceit(" ---------------------------------------------------------------- \n") ;
+					timeLastIoT	=	timeAct ;
+					if ( lastValueIoT != -1) {
+   						sprintf( mqttBuf, "%6.2f", ( value - lastValueIoT) * ( 360.0 / timeDiffIoT)) ;
+						sendData( 10497, mqttBuf) ;
+					}
+					lastValueIoT	=	value ;
 				}
 			}
 			break ;
 		case	0x60	:			// datatype:	unsigned
-			printf( "         dataType ... : unsigned, length ... : %d\n%s", len, prefix) ;
+			traceit( "         dataType ... : unsigned, length ... : %d\n%s", len, prefix) ;
 			lbp	=	lmp + len - 1 ;
 			value	=	0 ;
 			while ( lmp < lbp) {
 				value	=	(value << 8) + *lmp ;
-				printf( "%02x ", *lmp++) ;
+				traceit( "%02x ", *lmp++) ;
 			}
-			printf( " => %dd\n", value) ;
+			traceit( " => %dd\n", value) ;
 			done	=	1 ;
 			if ( strcmp( _numPrefix, "2.4.2.4.2") == 0) {
 				timeAct	=	value ;
 				timeDiff	=	timeAct - timeLast ;
-printf(" ############################## %d : %d\n", timeAct, timeDiff) ;
+				timeDiffIoT	=	timeAct - timeLastIoT ;
+traceit(" ############################## %d : %d\n", timeAct, timeDiff) ;
 			}
 			break ;
 		case	0x70	:			// datatype:	listOf
-			printf( "         dataType ... : listOf, length ... : %d\n", len) ;
+			traceit( "         dataType ... : listOf, length ... : %d\n", len) ;
 			for ( lenCnt = 0 ; lenCnt < len ; lenCnt++) {
 				sprintf( numPrefix, "%s.%d", _numPrefix, lenCnt+1) ;
 				lmp	=	analyze( lmp, _end, numPrefix, prefix) ;
@@ -501,7 +672,7 @@ printf(" ############################## %d : %d\n", timeAct, timeDiff) ;
 			done	=	1 ;
 			break ;
 		case	0x80	:			// datatype:	extended TL-field
-//			_debug( 1, progName, "dataType ... : extended TL-field, here: len := %d", len * 16) ;
+//			logitR2( cfgTrace, 1, progName, "dataType ... : extended TL-field, here: len := %d", len * 16) ;
 			addLenOctets++ ;
 			lenOffs	=	len * 16 ;
 			break ;
@@ -521,7 +692,7 @@ printf(" ############################## %d : %d\n", timeAct, timeDiff) ;
 			break ;
 		}
 	}
-//	printf( "%02d===================================%08lx %08lx \n", recLevel, lmp, _end) ;
+	traceit( "%02d===================================%08lx %08lx \n", recLevel, lmp, _end) ;
 	recLevel-- ;
 	return( lmp) ;			// return the more handy message pointer to the un-handy form
 }
@@ -534,20 +705,20 @@ void	mySqlQuery( char *_sql) {
 	MYSQL	*connectResult ;
 	do {
 		if ( retryCount > 0) {
-			knxLog( myKnxLogger, progName, "mySQL: retrying ...") ;
+			logit( "mySQL: retrying ...") ;
 			sleep( retryCount * 10) ;
 		}
 		if ( ( sqlResult = mysql_query( mySql, _sql))) {
-			knxLog( myKnxLogger, progName, "mySQL: error during query ...") ;
+			logit( "mySQL: error during query ...") ;
 			do {
 				if ( ( connectResult = mysql_real_connect( mySql, dbHost, dbUser, dbPassword, dbName, 0, NULL, 0)) == NULL) {
-					knxLog( myKnxLogger, progName, "mySQL: reconnecting ...") ;
+					logit( "mySQL: reconnecting ...") ;
 					reconnectCount++ ;
 					sleep( reconnectCount * 2) ;
 				}
 			} while ( reconnectCount < 10 && connectResult == NULL) ;
 			if ( reconnectCount >= 10) {
-				knxLog( myKnxLogger, progName, "mySQL: reconnect count exceeded;") ;
+				logit( "mySQL: reconnect count exceeded;") ;
 			}
 		} else {
 			result  =       mysql_store_result( mySql) ;
@@ -555,9 +726,27 @@ void	mySqlQuery( char *_sql) {
 		}
 	} while ( retryCount < 10 && sqlResult) ;
 	if ( retryCount >= 10) {
-		knxLog( myKnxLogger, progName, "mySQL: retry count exceeded; terminating ...") ;
+		logit( "mySQL: retry count exceeded; terminating ...") ;
 		exit( -3) ;
 	}
+}
+
+/**
+ *
+ */
+void	sendData( unsigned int _rcvAddr, unsigned char *_value) {
+	char	topic[64] ;
+
+	/**
+	 * add the logging record
+	 */
+	sprintf( topic, "%s%d/%d/%d",
+			cfgMqttPrefix,
+			(( _rcvAddr & 0xf800) >> 11) & 0x0001f,
+			(( _rcvAddr & 0x0700) >>  8) & 0x00007,
+			(( _rcvAddr & 0x00ff) >>  0) & 0x000ff) ;
+//printf( "%s \n", topic) ;
+	mosquitto_publish( mosq, NULL, topic, strlen( topic), _value, 1, false) ;
 }
 
 void	help() {

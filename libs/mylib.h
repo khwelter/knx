@@ -79,6 +79,7 @@ extern	void	dumpDataAll( node *, int, void *, char *) ;
 extern	void	createCRF( node *, int, int *, void *) ;
 extern	int	getEntry( node *, int, char *) ;
 extern	void	dumpHex( unsigned char *, int, int) ;
+extern	void	traceit( char *_fmt, ...) ;
 extern	void	logit( char *_fmt, ...) ;
 extern	void	logitR2( int, int, char *_fmt, ...) ;
 

@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -6,89 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/pi/knx/libs/crc16lib.c
-stdint.h
--
-
-/home/pi/knx/libs/debug.c
-stdio.h
--
-stdlib.h
--
-stdarg.h
--
-debug.h
-/home/pi/knx/libs/debug.h
-
-/home/pi/knx/libs/debug.h
-
-/home/pi/knx/libs/eib.c
-stdio.h
--
-stdlib.h
--
-string.h
--
-strings.h
--
-errno.h
--
-time.h
--
-math.h
--
-sys/types.h
--
-sys/ipc.h
--
-sys/shm.h
--
-sys/msg.h
--
-sys/sem.h
--
-unistd.h
--
-sys/signal.h
--
-eib.h
-/home/pi/knx/libs/eib.h
-debug.h
 /home/pi/knx/libs/debug.h
 
 /home/pi/knx/libs/eib.h
 sys/sem.h
 -
-
-/home/pi/knx/libs/inilib.c
-stdio.h
--
-stdlib.h
--
-stdint.h
--
-string.h
--
-strings.h
--
-unistd.h
--
-time.h
--
-math.h
--
-sys/types.h
--
-sys/ipc.h
--
-sys/shm.h
--
-pwd.h
--
-inilib.h
-/home/pi/knx/libs/inilib.h
-
-/home/pi/knx/libs/inilib.h
 
 /home/pi/knx/libs/mylib.c
 stdio.h
@@ -125,38 +47,4 @@ eib.h
 /home/pi/knx/libs/eib.h
 
 /home/pi/knx/libs/mylib.h
-
-/home/pi/knx/libs/tty.c
-tty.h
-/home/pi/knx/libs/tty.h
-
-/home/pi/knx/libs/tty.h
-stdio.h
--
-stdlib.h
--
-string.h
--
-termios.h
--
-sys/ioctl.h
--
-unistd.h
--
-fcntl.h
--
-sys/types.h
--
-sys/stat.h
--
-limits.h
--
-sys/types.h
--
-sys/ipc.h
--
-sys/shm.h
--
-sys/msg.h
--
 

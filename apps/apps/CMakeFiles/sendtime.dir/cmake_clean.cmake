@@ -4,8 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/sendtime.dir/knxlog.c.o"
   "sendtime.pdb"
   "sendtime"
-  "sendtime.pdb"
-  "CMakeFiles/CMakeRelink.dir/sendtime"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -4,8 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/hdlemh.dir/knxlog.c.o"
   "hdlemh.pdb"
   "hdlemh"
-  "hdlemh.pdb"
-  "CMakeFiles/CMakeRelink.dir/hdlemh"
 )
 
 # Per-language clean rules from dependency scanning.

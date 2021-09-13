@@ -4,8 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/knxps.dir/knxlog.c.o"
   "knxps.pdb"
   "knxps"
-  "knxps.pdb"
-  "CMakeFiles/CMakeRelink.dir/knxps"
 )
 
 # Per-language clean rules from dependency scanning.

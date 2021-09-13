@@ -4,8 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/hdlheater.dir/knxlog.c.o"
   "hdlheater.pdb"
   "hdlheater"
-  "hdlheater.pdb"
-  "CMakeFiles/CMakeRelink.dir/hdlheater"
 )
 
 # Per-language clean rules from dependency scanning.

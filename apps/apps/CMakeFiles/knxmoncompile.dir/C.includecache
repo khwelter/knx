@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -334,31 +334,33 @@ libxml/xmlexports.h
 ansidecl.h
 -
 
-/usr/include/mariadb/m_ctype.h
+/usr/include/mariadb/ma_list.h
+
+/usr/include/mariadb/mariadb_com.h
+
+/usr/include/mariadb/mariadb_ctype.h
 ctype.h
 -
 
-/usr/include/mariadb/my_list.h
+/usr/include/mariadb/mariadb_stmt.h
 
-/usr/include/mariadb/my_stmt.h
-
-/usr/include/mariadb/mysql.h
-sys/types.h
--
-mysql_com.h
-/usr/include/mariadb/mysql_com.h
-mysql_version.h
-/usr/include/mariadb/mysql_version.h
-my_list.h
-/usr/include/mariadb/my_list.h
-m_ctype.h
-/usr/include/mariadb/m_ctype.h
-my_stmt.h
-/usr/include/mariadb/my_stmt.h
-
-/usr/include/mariadb/mysql_com.h
-
-/usr/include/mariadb/mysql_version.h
+/usr/include/mariadb/mariadb_version.h
 custom_conf.h
 -
+
+/usr/include/mariadb/mysql.h
+stdarg.h
+-
+sys/types.h
+-
+mariadb_com.h
+/usr/include/mariadb/mariadb_com.h
+mariadb_version.h
+/usr/include/mariadb/mariadb_version.h
+ma_list.h
+/usr/include/mariadb/ma_list.h
+mariadb_ctype.h
+/usr/include/mariadb/mariadb_ctype.h
+mariadb_stmt.h
+/usr/include/mariadb/mariadb_stmt.h
 

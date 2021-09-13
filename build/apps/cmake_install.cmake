@@ -32,7 +32,12 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
   set(CMAKE_INSTALL_SO_NO_EXE "1")
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+# Is this installation the result of a crosscompile?
+if(NOT DEFINED CMAKE_CROSSCOMPILING)
+  set(CMAKE_CROSSCOMPILING "FALSE")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/knxbackbone" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/knxbackbone")
     file(RPATH_CHECK
@@ -60,7 +65,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/knxps" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/knxps")
     file(RPATH_CHECK
@@ -88,7 +93,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/knxkill" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/knxkill")
     file(RPATH_CHECK
@@ -116,7 +121,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/knxtpbridge" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/knxtpbridge")
     file(RPATH_CHECK
@@ -144,7 +149,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/knxipbridge" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/knxipbridge")
     file(RPATH_CHECK
@@ -172,7 +177,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/knxmqttbridge" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/knxmqttbridge")
     file(RPATH_CHECK
@@ -200,7 +205,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/knxmysqltrace" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/knxmysqltrace")
     file(RPATH_CHECK
@@ -228,7 +233,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/knxwebbridge" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/knxwebbridge")
     file(RPATH_CHECK
@@ -256,7 +261,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/knxmon" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/knxmon")
     file(RPATH_CHECK
@@ -284,7 +289,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/knxmondump" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/knxmondump")
     file(RPATH_CHECK
@@ -312,7 +317,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/knxmoncompile" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/knxmoncompile")
     file(RPATH_CHECK
@@ -340,7 +345,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/knxtrace" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/knxtrace")
     file(RPATH_CHECK
@@ -368,7 +373,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/hdllogic" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/hdllogic")
     file(RPATH_CHECK
@@ -396,7 +401,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/hdlpellet" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/hdlpellet")
     file(RPATH_CHECK
@@ -424,7 +429,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/hdlheatpump" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/hdlheatpump")
     file(RPATH_CHECK
@@ -452,7 +457,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/hdlheater" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/hdlheater")
     file(RPATH_CHECK
@@ -480,7 +485,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/hdlheating" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/hdlheating")
     file(RPATH_CHECK
@@ -508,7 +513,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/hdlshades" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/hdlshades")
     file(RPATH_CHECK
@@ -536,7 +541,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/hdltime" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/hdltime")
     file(RPATH_CHECK
@@ -564,7 +569,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/hdlsolar" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/hdlsolar")
     file(RPATH_CHECK
@@ -592,7 +597,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/hdltimer" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/hdltimer")
     file(RPATH_CHECK
@@ -620,7 +625,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/hdlemh" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/hdlemh")
     file(RPATH_CHECK
@@ -648,7 +653,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/hdltempmon" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/hdltempmon")
     file(RPATH_CHECK
@@ -676,7 +681,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/hdleasun" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/hdleasun")
     file(RPATH_CHECK
@@ -704,7 +709,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/sendb1" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/sendb1")
     file(RPATH_CHECK
@@ -732,7 +737,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/sendi8" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/sendi8")
     file(RPATH_CHECK
@@ -760,7 +765,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/sendu8" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/sendu8")
     file(RPATH_CHECK
@@ -788,7 +793,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/sendu16" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/sendu16")
     file(RPATH_CHECK
@@ -816,7 +821,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/sendf16" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/sendf16")
     file(RPATH_CHECK
@@ -844,7 +849,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/sendtime" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/sendtime")
     file(RPATH_CHECK
@@ -872,7 +877,7 @@ file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/home/pi/knx/build/ap
   endif()
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}/usr/bin/eibconvaddr" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/eibconvaddr")
     file(RPATH_CHECK

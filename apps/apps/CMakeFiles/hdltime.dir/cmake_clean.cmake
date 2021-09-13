@@ -4,8 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/hdltime.dir/knxlog.c.o"
   "hdltime.pdb"
   "hdltime"
-  "hdltime.pdb"
-  "CMakeFiles/CMakeRelink.dir/hdltime"
 )
 
 # Per-language clean rules from dependency scanning.

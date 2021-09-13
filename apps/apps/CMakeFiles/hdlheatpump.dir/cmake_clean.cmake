@@ -4,8 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/hdlheatpump.dir/knxlog.c.o"
   "hdlheatpump.pdb"
   "hdlheatpump"
-  "hdlheatpump.pdb"
-  "CMakeFiles/CMakeRelink.dir/hdlheatpump"
 )
 
 # Per-language clean rules from dependency scanning.

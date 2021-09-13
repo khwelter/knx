@@ -399,6 +399,17 @@ void	dumpHex( unsigned char *_buf, int _size, int _dest) {
 /**
  *
  */
+void	traceit( char *_fmt, ...) {
+	va_list	arglist ;
+
+	va_start( arglist, _fmt );
+	vprintf( _fmt, arglist) ;
+	va_end( arglist ) ;
+}
+
+/**
+ *
+ */
 void	logit( char *_fmt, ...) {
 	char	buffer[128] ;
 	va_list	arglist ;

@@ -4,8 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/eibconvaddr.dir/knxlog.c.o"
   "eibconvaddr.pdb"
   "eibconvaddr"
-  "eibconvaddr.pdb"
-  "CMakeFiles/CMakeRelink.dir/eibconvaddr"
 )
 
 # Per-language clean rules from dependency scanning.

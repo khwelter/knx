@@ -58,7 +58,6 @@
 #include	<mosquitto.h>
 
 #include	"debug.h"
-#include	"knxlog.h"
 #include	"tty.h"
 #include	"eib.h"
 #include	"nodeinfo.h"

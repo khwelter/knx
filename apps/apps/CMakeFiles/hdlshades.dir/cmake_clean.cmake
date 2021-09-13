@@ -4,8 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/hdlshades.dir/knxlog.c.o"
   "hdlshades.pdb"
   "hdlshades"
-  "hdlshades.pdb"
-  "CMakeFiles/CMakeRelink.dir/hdlshades"
 )
 
 # Per-language clean rules from dependency scanning.
