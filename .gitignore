@@ -32,3 +32,4 @@
 *.app
 
 apps/apps
+build/apps
