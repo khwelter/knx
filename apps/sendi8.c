@@ -80,6 +80,7 @@ int main( int argc, char *argv[]) {
 			int		msgLen ;
 			int		opt ;
 			int		sender	=	0 ;
+			char	rcvrAddr[16] ;
 			int		receiver	=	0 ;
 			int		value ;
 			int		repeat	=	1 ;		// default: repeat the EIB message
@@ -108,7 +109,7 @@ int main( int argc, char *argv[]) {
 			repeat	=	0x0 ;
 			break ;
 		case	'r'	:
-			receiver	=	atoi( optarg) ;
+			strcpy( rcvrAddr, optarg) ;
 			break ;
 		case	's'	:
 			cfgSenderAddr	=	atoi( optarg) ;
@@ -129,12 +130,12 @@ int main( int argc, char *argv[]) {
 	/**
 	 *
 	 */
-	if ( cfgSenderAddr != 0 && receiver != 0) {
+	if ( cfgSenderAddr != 0 && rcvrAddr != 0) {
 		/**
 		 *
 		 */
 		myEIB	=	eibOpen( cfgSenderAddr, 0, cfgQueueKey, progName, APN_WR | APN_INTRN) ;
-		eibWriteByteIA( myEIB, receiver, ( value & 0xff), 1) ;
+		eibWriteByte( myEIB, rcvrAddr, ( value & 0xff), 1) ;
 		eibClose( myEIB) ;
 	} else {
 		printf( "%s: invalid parameter; see:\n", progName) ;
