@@ -425,7 +425,7 @@ int	main( int argc, char *argv[]) {
 				groupAdr	=	eibGroupToInt( valves[ i].gaTempTarget) ;
 				targetRoomTemp	=	floats[ groupAdr] ;
 				if ( actRoomTemp > 1.0) {
-					_debug( 1, progName, "actual temperature seems reasonable") ;
+					_debug( 1, progName, "actual temperature seems reasonable at %4.1f degC", actRoomTemp) ;
 					if (( targetRoomTemp <= 1.0) || ( targetRoomTemp == 0)) {
 						_debug( 1, progName, "target room temperature from sensor <= 1.0\n") ;
 						targetRoomTemp	=	valves[ i].temp[modeCurrent] ;
