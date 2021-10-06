@@ -1,1 +1,0 @@
-/usr/bin/cc    CMakeFiles/sendu16.dir/sendu16.c.o CMakeFiles/sendu16.dir/eiblog.c.o CMakeFiles/sendu16.dir/knxlog.c.o  -o sendu16  -L/usr/local/Cellar/openssl/1.0.2e/lib -Wl,-rpath,/usr/local/Cellar/openssl/1.0.2e/lib:/home/pi/knx/apps/libs: -lm ../libs/libeibknxlib.so 

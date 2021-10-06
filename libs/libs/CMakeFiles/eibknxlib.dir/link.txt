@@ -1,1 +1,0 @@
-/usr/bin/c++  -fPIC   -shared -Wl,-soname,libeibknxlib.so -o libeibknxlib.so CMakeFiles/eibknxlib.dir/eib.c.o CMakeFiles/eibknxlib.dir/tty.c.o CMakeFiles/eibknxlib.dir/debug.c.o CMakeFiles/eibknxlib.dir/mylib.c.o CMakeFiles/eibknxlib.dir/inilib.c.o CMakeFiles/eibknxlib.dir/heatpump.cpp.o CMakeFiles/eibknxlib.dir/heating.cpp.o CMakeFiles/eibknxlib.dir/buffer.cpp.o 

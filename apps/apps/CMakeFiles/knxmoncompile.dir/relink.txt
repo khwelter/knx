@@ -1,1 +1,0 @@
-/usr/bin/cc     CMakeFiles/knxmoncompile.dir/knxmoncompile.c.o CMakeFiles/knxmoncompile.dir/myxml.c.o  -o CMakeFiles/CMakeRelink.dir/knxmoncompile  -L/usr/local/Cellar/openssl/1.0.2e/lib -lm -lxml2 ../libs/libeibknxlib.so /usr/lib/arm-linux-gnueabihf/libmariadb.so 

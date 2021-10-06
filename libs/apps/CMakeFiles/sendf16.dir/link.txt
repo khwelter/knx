@@ -1,1 +1,0 @@
-/usr/bin/cc     CMakeFiles/sendf16.dir/sendf16.c.o CMakeFiles/sendf16.dir/eiblog.c.o CMakeFiles/sendf16.dir/knxlog.c.o  -o sendf16  -L/usr/local/Cellar/openssl/1.0.2e/lib -Wl,-rpath,/usr/local/Cellar/openssl/1.0.2e/lib:/home/pi/project/knx/libs/libs: -lm ../libs/libeibknxlib.so 

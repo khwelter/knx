@@ -1,1 +1,0 @@
-/usr/bin/cc     CMakeFiles/hdleasun.dir/hdleasun.c.o CMakeFiles/hdleasun.dir/eiblog.c.o CMakeFiles/hdleasun.dir/knxlog.c.o  -o CMakeFiles/CMakeRelink.dir/hdleasun  -L/usr/local/Cellar/openssl/1.0.2e/lib -lm ../libs/libeibknxlib.so /usr/lib/arm-linux-gnueabihf/libmosquitto.so /usr/lib/arm-linux-gnueabihf/libmariadb.so 

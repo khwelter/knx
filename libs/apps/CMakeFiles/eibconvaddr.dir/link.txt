@@ -1,1 +1,0 @@
-/usr/bin/cc     CMakeFiles/eibconvaddr.dir/eibconvaddr.c.o CMakeFiles/eibconvaddr.dir/eiblog.c.o CMakeFiles/eibconvaddr.dir/knxlog.c.o  -o eibconvaddr  -L/usr/local/Cellar/openssl/1.0.2e/lib -Wl,-rpath,/usr/local/Cellar/openssl/1.0.2e/lib:/home/pi/project/knx/libs/libs: -lm ../libs/libeibknxlib.so 

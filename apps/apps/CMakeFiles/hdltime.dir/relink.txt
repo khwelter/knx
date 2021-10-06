@@ -1,1 +1,0 @@
-/usr/bin/cc     CMakeFiles/hdltime.dir/hdltime.c.o CMakeFiles/hdltime.dir/eiblog.c.o CMakeFiles/hdltime.dir/knxlog.c.o  -o CMakeFiles/CMakeRelink.dir/hdltime  -L/usr/local/Cellar/openssl/1.0.2e/lib -lm ../libs/libeibknxlib.so 

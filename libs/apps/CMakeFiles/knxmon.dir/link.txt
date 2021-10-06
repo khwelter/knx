@@ -1,1 +1,0 @@
-/usr/bin/cc     CMakeFiles/knxmon.dir/knxmon.c.o CMakeFiles/knxmon.dir/eiblog.c.o CMakeFiles/knxmon.dir/knxlog.c.o CMakeFiles/knxmon.dir/myxml.c.o  -o knxmon  -L/usr/local/Cellar/openssl/1.0.2e/lib -Wl,-rpath,/usr/local/Cellar/openssl/1.0.2e/lib:/home/pi/project/knx/libs/libs: -lm -lxml2 ../libs/libeibknxlib.so /usr/lib/arm-linux-gnueabihf/libmysqlclient.so 

@@ -1,1 +1,0 @@
-/usr/bin/cc     CMakeFiles/sendi8.dir/sendi8.c.o CMakeFiles/sendi8.dir/eiblog.c.o CMakeFiles/sendi8.dir/knxlog.c.o  -o sendi8  -L/usr/local/Cellar/openssl/1.0.2e/lib -Wl,-rpath,/usr/local/Cellar/openssl/1.0.2e/lib:/home/pi/project/knx/libs/libs: -lm ../libs/libeibknxlib.so 
