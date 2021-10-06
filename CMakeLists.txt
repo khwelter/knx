@@ -1,4 +1,11 @@
 cmake_minimum_required(VERSION 3.7.2)
+### Require out-of-source builds
+file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)
+if(EXISTS "${LOC_PATH}")
+    message(FATAL_ERROR "You cannot build in a source directory (or any directory with "
+                        "CMakeLists.txt file). Please make a build subdirectory. Feel free to "
+                        "remove CMakeCache.txt and CMakeFiles.")
+endif()
 message( STATUS "CMAKE_SOURCE_DIR.............: " ${CMAKE_SOURCE_DIR})
 set( CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/build/cmake")
 project (KNXTOOLS)

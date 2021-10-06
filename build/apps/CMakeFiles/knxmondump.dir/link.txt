@@ -1,1 +1,0 @@
-/usr/bin/cc    CMakeFiles/knxmondump.dir/knxmondump.c.o CMakeFiles/knxmondump.dir/eiblog.c.o CMakeFiles/knxmondump.dir/knxlog.c.o CMakeFiles/knxmondump.dir/myxml.c.o  -o knxmondump  -L/usr/local/Cellar/openssl/1.0.2e/lib -Wl,-rpath,/usr/local/Cellar/openssl/1.0.2e/lib:/home/pi/knx/build/libs: -lm -lxml2 ../libs/libeibknxlib.so /usr/lib/arm-linux-gnueabihf/libmariadb.so 

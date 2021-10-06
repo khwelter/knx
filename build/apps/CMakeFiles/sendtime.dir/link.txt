@@ -1,1 +1,0 @@
-/usr/bin/cc    CMakeFiles/sendtime.dir/sendtime.c.o CMakeFiles/sendtime.dir/eiblog.c.o CMakeFiles/sendtime.dir/knxlog.c.o  -o sendtime  -L/usr/local/Cellar/openssl/1.0.2e/lib -Wl,-rpath,/usr/local/Cellar/openssl/1.0.2e/lib:/home/pi/knx/build/libs: -lm ../libs/libeibknxlib.so 

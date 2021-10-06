@@ -1,1 +1,0 @@
-/usr/bin/cc    CMakeFiles/hdlpellet.dir/hdlpellet.c.o CMakeFiles/hdlpellet.dir/eiblog.c.o CMakeFiles/hdlpellet.dir/knxlog.c.o  -o hdlpellet  -L/usr/local/Cellar/openssl/1.0.2e/lib -Wl,-rpath,/usr/local/Cellar/openssl/1.0.2e/lib:/home/pi/knx/build/libs: -lm ../libs/libeibknxlib.so 

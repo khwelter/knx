@@ -1,1 +1,0 @@
-/usr/bin/cc    CMakeFiles/knxsim.dir/knxsim.c.o CMakeFiles/knxsim.dir/eiblog.c.o CMakeFiles/knxsim.dir/knxlog.c.o  -o knxsim  -L/usr/local/Cellar/openssl/1.0.2e/lib -Wl,-rpath,/usr/local/Cellar/openssl/1.0.2e/lib:/home/pi/knx/build/libs -lm ../libs/libeibknxlib.so 
