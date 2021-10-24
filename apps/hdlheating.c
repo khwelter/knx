@@ -50,6 +50,7 @@
 #include	<sys/shm.h>
 #include	<sys/msg.h>
 #include	<sys/signal.h>
+#include	<sqlite3.h>
 
 #include	"debug.h"
 #include	"nodeinfo.h"
@@ -83,6 +84,29 @@ typedef	struct	{
 		char		mode[96] ;		// 0= off, 1= on; 15 minutes grid "0000... " starting at 00:00, 00:15, 00:30 ...
 	}	timeProfile ;
 
+/**
+DROP TABLE heating;
+CREATE TABLE heating(
+	Id INTEGER PRIMARY KEY AUTOINCREMENT,
+	Name STRING[16],
+	Active INTEGER,
+	GAActive STRING[16],
+	GATempTarget STRING[16],
+	GATempAct STRING[16],
+	GAValve STRING[16],
+	TargetProt FLOAT,
+	TargetNight FLOAT,
+	TargetDay FLOAT,
+	TargetOffsite FLOAT
+);
+insert
+	into heating(Name, Active, GAActive, GATempTarget, GATempAct, GAValve, TargetProt, TargetNight, TargetDay, TargetOffsite)
+	values
+		( "UG_TECH", 0, "1/1/14", "1/1/10", "1/1/11", "1/1/12",  7.0, 19.0, 21.0, 19.0),
+		( "UG_OFCL", 0, "1/2/14", "1/2/10", "1/2/11", "1/2/12",  7.0, 19.0, 21.0, 19.0),
+		( "OG_HALL", 0, "3/6/14", "3/6/10", "3/6/11", "3/6/12",  7.0, 19.0, 21.0, 19.0)
+		;
+ */
 typedef	struct	{
 		int		id ;
 		char	name[32] ;
