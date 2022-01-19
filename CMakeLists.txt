@@ -49,6 +49,14 @@ if ( MariaDBClient_FOUND)
 	include_directories( ${MariaDBClient_INCLUDE_DIRS})
 endif( MariaDBClient_FOUND)
 
+find_package( SQLite3)
+if ( SQLite3_FOUND)
+	message( STATUS "SQLite3 include dir............: " ${SQLite3_INCLUDE_DIR})
+	message( STATUS "SQLite3 libraries..............: " ${SQLite3_LIBRARIES})
+	message( "found SQLite3 ...")
+	include_directories( ${SQLite3_INCLUDE_DIRS})
+endif( SQLite3_FOUND)
+
 # - Find libmosquitto
 # Find the native libmosquitto includes and libraries
 #
