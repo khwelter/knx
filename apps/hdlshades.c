@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015-2020 wimtecc, Karl-Heinz Welter
+ * Copyright (c) 2015-2022 wimtecc, Karl-Heinz Welter
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,7 @@
  * 2016-04-04	PA1		khw		inception;
  * 2016-10-07	PA2		khw		enabled EG_BATH;
  * 2019-05-11	PA7		khw		adapted to new structure of group addresses;
+ * 2021-01-06	PA8		khw		completed for shades in basement;
  *
  */
 #include	<stdio.h>
@@ -134,9 +135,9 @@ shadePosition	shades[]	=	{
 /**
  *	basement shades
  */
-		{	0, 	0,"UG_OFCL"			, "1/2/100"	,&wdTime1		}
-	,	{	0, 	0,"UG_OFCR"			, "1/3/100"	,&wdTime1		}
-	,	{	0, 	0,"UG_STO1"			, "1/4/100"	,&wdTime1		}
+		{	0, 	1,"UG_OFCL"			, "1/2/100"	,&wdTime1		}
+	,	{	0, 	1,"UG_OFCR"			, "1/3/100"	,&wdTime1		}
+	,	{	0, 	1,"UG_STO1"			, "1/4/100"	,&wdTime1		}
 /**
  *	ground-floor shades
  */
