@@ -49,14 +49,6 @@ if ( MariaDBClient_FOUND)
 	include_directories( ${MariaDBClient_INCLUDE_DIRS})
 endif( MariaDBClient_FOUND)
 
-find_package( SQLite3)
-if ( SQLite3_FOUND)
-	message( STATUS "SQLite3 include dir............: " ${SQLite3_INCLUDE_DIR})
-	message( STATUS "SQLite3 libraries..............: " ${SQLite3_LIBRARIES})
-	message( "found SQLite3 ...")
-	include_directories( ${SQLite3_INCLUDE_DIRS})
-endif( SQLite3_FOUND)
-
 # - Find libmosquitto
 # Find the native libmosquitto includes and libraries
 #
@@ -74,7 +66,28 @@ if (NOT MOSQUITTO_LIBRARY)
     NAMES mosquitto)
 endif()
 
-include(FindPackageHandleStandardArgs)
+# include(FindPackageHandleStandardArgs)
+
+if (NOT SQLITE3_INCLUDE_DIR)
+  find_path(SQLITE3_INCLUDE_DIR sqlite3.h)
+endif()
+
+if (NOT SQLITE3_LIBRARY)
+  find_library(
+    SQLITE3_LIBRARY
+    NAMES sqlite3)
+endif()
+
+# include(FindPackageHandleStandardArgs)
+
+find_package_handle_standard_args(
+  SQLITE3 DEFAULT_MSG
+  SQLITE3_LIBRARY SQLITE3_INCLUDE_DIR)
+
+message(STATUS "libsqlite3 include dir: ${SQLITE3_INCLUDE_DIR}")
+message(STATUS "libsqlite3: ${SQLITE3_LIBRARY}")
+set(SQLITE3_LIBRARIES ${SQLITE3_LIBRARY})
+mark_as_advanced(SQLITE3_INCLUDE_DIR SQLITE3_LIBRARY MOSQUITTO_INCLUDE_DIR MOSQUITTO_LIBRARY)
 
 find_package_handle_standard_args(
   MOSQUITTO DEFAULT_MSG
@@ -83,8 +96,6 @@ find_package_handle_standard_args(
 message(STATUS "libmosquitto include dir: ${MOSQUITTO_INCLUDE_DIR}")
 message(STATUS "libmosquitto: ${MOSQUITTO_LIBRARY}")
 set(MOSQUITTO_LIBRARIES ${MOSQUITTO_LIBRARY})
-
-mark_as_advanced(MOSQUITTO_INCLUDE_DIR MOSQUITTO_LIBRARY)
 
 add_subdirectory (apps)
 add_subdirectory (libs)

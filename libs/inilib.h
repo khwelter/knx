@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015, 2016 wimtecc, Karl-Heinz Welter
+ * Copyright (c) 2015-2226 wimtecc, Karl-Heinz Welter
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,10 +27,11 @@
  *
  * Revision history
  *
- * date		rev.	who	what
+ * date			rev.	who	what
  * ----------------------------------------------------------------------------
- * 2015-11-20	PA1	khw	inception;
- * 2016-04-27	PA2	khw	reduced to the max;
+ * 2015-11-20	PA1		khw	inception;
+ * 2016-04-27	PA2		khw	reduced to the max;
+ * 2022-02-13	PA3		khw	added sqlite database as configuration source;
  *
  */
 
@@ -38,11 +39,13 @@
 #define	inilib_INCLUDED
 
 typedef	enum	iniStatus	{
-		OK	=	0
+		OK	=	0,
+		ERROR = -1
 	} iniStat ;
 
 typedef	void	(*iniCB)( char *, char *, char *) ;
 
 extern	iniStat	iniFromFile( char *, iniCB _iniCB) ;
+extern	iniStat	iniFromSQLite( char *, iniCB _iniCB) ;
 
 #endif

@@ -31,10 +31,12 @@
  * ----------------------------------------------------------------------------
  * 2015-11-20	PA1	khw	inception;
  * 2016-04-27	PA2	khw	reduced to the max;
+ * 2022-02-13	PA3		khw	added sqlite database as configuration source;
  *
  */
 #include	<stdio.h>
 #include	<stdlib.h>
+#include	<stdbool.h>
 #include	<stdint.h>
 #include	<string.h>
 #include	<strings.h>
@@ -45,6 +47,7 @@
 #include	<sys/ipc.h>
 #include	<sys/shm.h>
 #include	<pwd.h>
+#include	<sqlite3.h>
 
 #include	"inilib.h"
 
@@ -134,6 +137,99 @@ iniStat	iniFromFile( char *_file, iniCB _iniCB) {
 			fclose( iniFile) ;
 			iniFile	=	NULL ;
 		}
+	}
+	return status ;
+}
+
+int	dbCallback( void *_iniCB, int _colCount, char **_colData, char **colNames) {
+	char	block[32], para[32], value[64], value2[64] ;
+	iniCB	myCB = (iniCB) _iniCB ;
+
+printf( "f@ %08lx \n", _iniCB) ;
+	
+	strcpy( block, _colData[2]) ;
+	strcpy( para, _colData[5]) ;
+	strcpy( value, _colData[6]) ;
+	myCB( block, para, value) ;
+	return 0 ;
+}
+
+iniStat	iniFromSQLite( char *_db, iniCB _iniCB) {
+		iniStat	status	=	OK ;
+		int	rc ;
+		sqlite3	*db ;
+		char	*errMsg = NULL ;
+	const	char	*homedir;
+		bool	done	=	false ;
+		int	pathId ;
+		char	dbName[128] ;
+	/**
+	 *
+	 */
+printf( "f@ %08lx \n", _iniCB) ;
+printf( "rc := %d \n", rc) ;
+	pathId	=	0 ;
+	while ( ! done) {
+printf( "pathId := %d \n", pathId) ;
+		switch ( pathId) {
+		case	0	:
+			strcpy( dbName, "/etc/knx.d/") ;
+			strcat( dbName, _db) ;
+			int rc = sqlite3_open( dbName, &db);
+printf( "rc := %d \n", rc) ;
+			if ( rc != SQLITE_OK) {
+				printf( "inilib.c: path %d, could not open(find?) ini file [%s]; error [%s]\n",
+							pathId,
+							dbName,
+							sqlite3_errmsg(db)) ;
+			} else {
+				pathId = 99 ;
+			}
+			break ;
+		case	1	:
+			if (( homedir = getenv("HOME")) == NULL) {
+				homedir	=	getpwuid( getuid())->pw_dir;
+			}
+			strcpy( dbName, homedir) ;
+			strcat( dbName, "/.") ;
+			strcat( dbName, _db) ;
+			rc = sqlite3_open( dbName, &db);
+			if ( rc != SQLITE_OK) {
+				printf( "inilib.c: path %d, could not open(find?) ini file [%s]\n", pathId, dbName) ;
+			} else{
+				pathId = 99 ;
+			}
+			break ;
+		default	:
+			done	=	true ;
+			break ;
+		}
+		pathId++ ;
+	}
+
+printf( "rc := %d \n", rc) ;
+	
+	if ( rc == SQLITE_OK) {
+
+		rc = sqlite3_exec(db, "SELECT * FROM ConfigParam", dbCallback, _iniCB, &errMsg);
+		if (rc != SQLITE_OK ) {
+			status = ERROR ;
+			goto Finish;
+		} 
+	} else {
+		fprintf(stderr, "Failed to select data\n");
+		fprintf(stderr, "SQL error: %s\n", errMsg);
+		sqlite3_close(db);
+		status = ERROR ;
+		goto Finish;
+	}
+
+FinishOK:
+	status = OK ;
+
+Finish:
+	if ( errMsg != NULL) {
+		sqlite3_free( errMsg) ;
 	}
 	return status ;
 }

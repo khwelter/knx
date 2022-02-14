@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015-2020 wimtecc, Karl-Heinz Welter
+ * Copyright (c) 2015-2022 wimtecc, Karl-Heinz Welter
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  */
 /*
  *
- * knxmqtt.c
+ * knxmqttbridge2.c
  *
  * EIB/KNX bus to MQTT Broker bridge
  *
@@ -45,6 +45,8 @@
  * -----------------------------------------------------------------------------
  * 2018-08-10	PA1		khw	inception; splitted off from the knxtrace.c, which
  *							hosted the functionality so far as '-m 6';
+ * 2022-02-13	PA2		khw	added new configuration through sqlite database
+ *							(located in /etc/knx.d/knxdata.sqlite);
  *
  */
 #include	<stdio.h>
@@ -276,13 +278,13 @@ void	connectMQTT() {
  *
  */
 void	iniCallback( char *_block, char *_para, char *_value) {
-//_debug( 1, progName, "receive ini value block/paramater/value ... : %s/%s/%s\n", _block, _para, _value) ;
-	if ( strcmp( _block, "[knxglobals]") == 0) {
+	printf( "%s, receive ini value block/paramater/value ... : %s/%s/%s\n", progName, _block, _para, _value) ;
+	if ( strcmp( _block, "knxglobals") == 0) {
 		if ( strcmp( _para, "queueKey") == 0) {
 			cfgQueueKey	=	atoi( _value) ;
 		}
-	} else if ( strcmp( _block, "[knxmqttbridge]") == 0) {
-	_debug( 1, progName, "receive ini value block/paramater/value ... : %s/%s/%s\n", _block, _para, _value) ;
+	} else if ( strcmp( _block, "mqttbridge2") == 0) {
+	printf( "%s, checking ini value block/paramater/value ... : %s/%s/%s\n", progName, _block, _para, _value) ;
 		if ( strcmp( _para, "host") == 0) {
 			strcpy( cfgMqttHost, _value) ;
 		} else if ( strcmp( _para, "user") == 0) {
@@ -376,7 +378,7 @@ int	main( int argc, char *argv[]) {
 		int	shmCRFId ;
 		int	shmCRFSize	=	65536 * sizeof( int) ;
 		int	*crf ;
-	char	iniFilename[]	=	"knx.ini" ;
+	char	iniFilename[]	=	"knxdata.sqlite" ;
 
 	/**
 	 *
@@ -393,7 +395,7 @@ int	main( int argc, char *argv[]) {
 	 *
 	 */
 	runLevel	=	1 ;
-	iniFromFile( iniFilename, iniCallback) ;
+	iniFromSQLite( iniFilename, iniCallback) ;
 
 	/**
 	 * get command line options
